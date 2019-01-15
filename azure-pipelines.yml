@@ -1,0 +1,35 @@
+
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - api/*
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- script: |
+    echo Starting the build
+    mvn test
+    mvn package
+  workingDirectory: api/
+  displayName: 'Maven test and build'
+- script: |
+    docker build -t $ACR_SERVER/$ACR_CONTAINER_TAG .
+  workingDirectory: api/
+  displayName: 'Docker Build'
+- script: |
+    docker login $(ACR_SERVER) -u $(ACR_USERNAME) -p $(ACR_PASSWORD)
+  displayName: 'Docker Login'
+- script: |
+    docker push $ACR_SERVER/$ACR_CONTAINER_TAG
+  displayName: 'Docker Push'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
