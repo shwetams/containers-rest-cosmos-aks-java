@@ -18,6 +18,13 @@ The below values are required as inputs to the script:
 2. Azure Resource Group (Add existing if one exists; else create a new one)
 3. Azure Deployment Location (i.e., EastUS, WestUS)
 4. App-name: Application Name
+5. ServicePrincipal ClientId  : see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+6. ServicePrincipal ClientSecret (password):  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+7. objectId : object ID of your live or microsoft account :  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+8. DB-CONNSTR: get from  `vars.env` file
+9. DB-NAME: get from  `vars.env` file
+10. EXCLUDE-FILTER: default null
+
 
 Another way to deploy is to run one-click deploy for all resources using Deploy to Azure:
 
@@ -41,28 +48,10 @@ Your deployment resources can now be used as part of your CD pipeline.
 
 ## Redis Cache
 
-- A Redis cache is used to enhance query performance.
-- The capacity of the Redis cache can be set to a value 1-6 in the ARM template.
-- You can enable or disable non-SSL port in the ARM template.
-- Azure allows 3 different values for the sku viz. Basic, Standard and Premium having different costs for each.
+- To be updated
 
 ## Auto Scaling
 
-- The app service uses auto scaling.  
-- When the CPU usage for an instance exceeds 70%, the app will automatically be scaled to add another compute instance, up to 5 instances.  This limit can be changed based on requirements.
-- When memory usage for an instance exceeds 70%, the app will automatically be scaled to add another compute instance, up to 5 instances. This limit can be changed based on requirements.
-- The minimum number of instances is set to 1.  This means that if the memory used on an instance is less, the instances will be scaled down automatically.
+- To be updated
 
-## Performance Testing
 
-To test the performance of an App Service:
-
-1. Navigate to the Azure Portal for your App Service
-2. Under `Developer Tools` select `Performance Testing`
-!['This image is of the performance testing menu item'](./images/perftest1.png)
-3. Select `New`
-!['This image is of new performance testing button'](./images/perftest2.png)
-4. Name the new performance test and configure the settings appropriately
-!['This image is of performance testing settings'](./images/perftest3.png)
-5. Submit the test.  After resources are automatically allocated, the test will run.
-6. After the test completes, Azure will automatically generate graphs and charts for analysis.
