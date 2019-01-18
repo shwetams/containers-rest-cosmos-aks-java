@@ -86,3 +86,22 @@ show collections
 db.titles.count()
 db.titles.find ({primaryTitle: "Casablanca"})
 ```
+
+### create a new service principal and object id which will be used for AKS and key vault setup
+
+- Log into Azure: `az login`
+- If you have multiple subscriptions, confirm that the project subscription is active:
+
+``` Bash
+az account show
+az account set --subscription <subscription name/ID>
+
+az ad sp create-for-rbac --skip-assignment
+```
+- save values of appId and password. These will be used for AKS setup
+- Run below command to get object id of live id or microsoft id
+``` Bash
+az ad user show --upn-or-object-id <your Live ID> | jq -r .objectId
+
+```
+- save values of Object ID. These will be used for Key vault setup

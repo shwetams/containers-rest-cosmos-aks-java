@@ -53,7 +53,8 @@ This OSS solution uses the following OSS technologies:
 * **Spring Boot:** One of the most widely used and capable Java frameworks.
 * **Spring Data REST:** A simple way to build REST APIs in a Spring Boot application that are backed by a persistent data repository.
 * **Maven:** A commonly used tool for building and managing Java projects.
-* **React:** Popular JavaScript framework for building UI. (Additional OSS tools used in the UI sample include TypeScript, webpack, and Jest.)
+* **Kubernetes:** An open-source system for automating deployment, scaling, and management of containerized applications (Additional OSS tools used in the logging, monitoring and reverse proxy.)
+* **Gitops:** A way to do Continuous Delivery
 
 ## Azure Technologies & Services
 
@@ -61,15 +62,11 @@ As with our OSS technology choices, we intentionally selected a set of Azure tec
 
 * **Azure DevOps:** Microsoft's CI/CD solution, which is the Azure-branded version of Microsoft's mature and widely used VSTS solution.
 * **Azure Resource Manager (ARM):** Azure's solution for deploying and managing Azure resources via JSON-based templates.
-* **App Services:** A robust platform-as-a-service (PaaS) solution for application hosting. App Services hides the complexity of provisioning and managing VMs, auto-scaling, creating public IPs, etc.
-
->**Note:** App Services is appropriate for a wide range of enterprise apps, including certain highly scaled apps, though we often recommend 
->Azure Kubernetes Service (AKS) for apps that require certain advanced capabilities.
 
 * **Cosmos DB:** Cosmos DB is perhaps the fastest and most reliable NoSQL data storage service in the world. It is an excellent choice when performance and reliability are a must, and when enterprises require multi-region write capabilities, which are essential for both application/service performance and for HA/DR scenarios.
 * **Azure Traffic Manager:** DNS-based routing service to connect users to the nearest data center. Redirects traffic to healthy location when another region goes offline. Also enables recommended method blue-green (aka canary) deployments with Azure App Services.
-* **Application Gateway:** Provides a single public end-point (public IP) and acts as a reverse proxy (based on URI path) to send requests to the correct App Service instance.
-* **App Insights:** Enterprise developers use App Insights to monitor and detect performance anomalies in production applications.
+* **Azure Monitoring:** It allows to collect granular performance and utilisation data, activity and diagnostics logs, and notifications from your Azure resources in a consistent manner.
+* **Key vault:** Enterprise developers use App Insights to monitor and detect performance anomalies in production applications.
 
 The solution leverages Azure Dev Ops for Continuous Integration 
 and Delivery (CI/CD), and it deploys complete Azure environments via Azure Resource Manager (ARM) templates.
@@ -82,11 +79,10 @@ Key technologies and concepts demonstrated:
 |---|---
 | Common, standard technologies | <li>Java programming language<li>Spring Boot Framework, one of the most widely used frameworks for Java<li>MongoDB NoSQL API (via Azure Cosmos DB)<li>Redis Cache
 | Containerization | Microservices implemented in Docker containers, hosted by the Azure App Service for Containers PaaS service.
-| CI/CD pipeline | Continuous integration/continuous delivery (CI/CD) is implemented using Azure DevOps with a pipeline of environments that support dev, testing and production
+| CI/CD pipeline | Continuous integration/continuous delivery (CI/CD) is implemented using Azure DevOps and Gitops with a pipeline of environments that support dev, testing and production
 | Automated deployment | <li>Azure ARM templates<li>App Service for Containers<li>Azure container registry
-| High Availability/Disaster Recovery (HA/DR) | Full geo-replication of microservices and data, with automatic failover in the event of an issue in any region:<br><br><li>Cosmos DB deployed to multiple regions with active-active read/write<li>Session consistency to assure that user experience is consistent across failover<li>Stateless microservices deployed to multiple regions<li>Health monitoring to detect errors that require failover<li>Azure Traffic Manager redirects traffic to healthy region
+| High Availability/Disaster Recovery (HA/DR) | Full geo-replication of containers and data, with automatic failover in the event of an issue in any region:<br><br><li>Cosmos DB deployed to multiple regions with active-active read/write<li>Session consistency to assure that user experience is consistent across failover<li>Stateless microservices deployed to multiple regions<li>Health monitoring to detect errors that require failover<li>AKS allows you scaling resources not only vertically but also horizontally, easily and quickly
 | Demonstrates insfrastructure best practices | <li>Application auto-scaling<li>Minimize network latency through geo-based DNS routing<li>API authentication<li>Distributed denial of service (DDoS) protection & mitigation
-| Load and performance testing | The solution includes an integrated traffic simulator to demonstrate that the solution auto-scales properly, maintaining application performance as scale increases
 | Proves application resiliency through chaos testing | A Chaos Monkey-style solution to shut down different portions of the architecture in order to validate that resilience measures keep everything running in the event of any single failure
 
 ## Contribute
