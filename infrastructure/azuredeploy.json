@@ -194,7 +194,7 @@
         "resources": [
           {
             "type": "secrets",
-            "name": "DB-CONNSTR",
+            "name": "db-connstr",
             "apiVersion": "2015-06-01",
             "tags": { "displayName": "secret" },
             "properties": {
@@ -206,7 +206,7 @@
           },
           {
             "type": "secrets",
-            "name": "DB-NAME",
+            "name": "db-name",
             "apiVersion": "2015-06-01",
             "tags": { "displayName": "secret" },
             "properties": {
@@ -218,7 +218,7 @@
           },
           {
             "type": "secrets",
-            "name": "EXCLUDE-FILTER",
+            "name": "exclude-filter",
             "apiVersion": "2015-06-01",
             "tags": { "displayName": "secret" },
             "properties": {
@@ -230,7 +230,7 @@
           },
           {
             "type": "secrets",
-            "name": "OAUTH-KEYSET-URI",
+            "name": "oauth-keyset-uri",
             "apiVersion": "2015-06-01",
             "tags": { "displayName": "secret" },
             "properties": {
