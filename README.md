@@ -1,23 +1,24 @@
 # Containerized Java REST Services on Azure App Service with a CosmosDB backend
 
-## Project Health
+<!-- ## Project Health
 
 API Build Status: [![Build Status](https://dev.azure.com/csebostoncrew/ProjectJackson/_apis/build/status/GitHub%20Builds/ProjectJackson-API-GitHub?branchName=master)](https://dev.azure.com/csebostoncrew/ProjectJackson/_build/latest?definitionId=22?branchName=master)
 
 UI Build Status: [![Build Status](https://dev.azure.com/csebostoncrew/ProjectJackson/_apis/build/status/GitHub%20Builds/ProjectJackson-UI-GitHub?branchName=master)](https://dev.azure.com/csebostoncrew/ProjectJackson/_build/latest?definitionId=25?branchName=master)
 
 Infrastructure Build Status: [![Build Status](https://dev.azure.com/csebostoncrew/ProjectJackson/_apis/build/status/GitHub%20Builds/ProjectJackson-Infrastructure-GitHub?branchName=master)](https://dev.azure.com/csebostoncrew/ProjectJackson/_build/latest?definitionId=23?branchName=master)
-
+-->
 ## Contents:
 
-* Introduction & Overiew (this document)
+* Concept introduction & overview (this document)
+* [Current & planned features](#current-and-planned-features) 
 * [Quick Start for Developers](./GettingStarted.md)
 * [Sample Application and REST APIs](./SampleApp.md)
 
 ## Introduction
 
-This project was created to demonstrate end-to-end best practices building and running "enterprise-class"
-applications on Azure. This document explains what the project provides and why, and it provides instructions for getting started.
+This project has been created to emulate several best practices that can be adopted while building and deploying applications on Azure.
+This document explains what the project provides and why, and it provides instructions for getting started. This project is work in progress as we continually evolve the deployment code. 
 
 ## Enterprise-Class Applications Defined
 
@@ -84,6 +85,35 @@ Key technologies and concepts demonstrated:
 | High Availability/Disaster Recovery (HA/DR) | Full geo-replication of containers and data, with automatic failover in the event of an issue in any region:<br><br><li>Cosmos DB deployed to multiple regions with active-active read/write<li>Session consistency to assure that user experience is consistent across failover<li>Stateless microservices deployed to multiple regions<li>Health monitoring to detect errors that require failover<li>AKS allows you scaling resources not only vertically but also horizontally, easily and quickly
 | Demonstrates insfrastructure best practices | <li>Application auto-scaling<li>Minimize network latency through geo-based DNS routing<li>API authentication<li>Distributed denial of service (DDoS) protection & mitigation
 | Proves application resiliency through chaos testing | A Chaos Monkey-style solution to shut down different portions of the architecture in order to validate that resilience measures keep everything running in the event of any single failure
+
+## Current and Planned Features
+
+We are continually evolving the code incorporating best practices, and will be documenting the changes as we make. This section will always be updated and you can use this as a reference to identify what the solution entails and what's in progress.
+
+
+## Current
+
+| Component | Description
+|---|---
+| Spring Boot Application based on IMDB Data | This is a sample application and you can easily replace with your own application
+| IMDB Data import scripts | The scripts to load and store IMDB data in Azure Cosmos DB using the Mongo API, you can replace this with your own cosmos DB data
+| Build pipeline | Built in Azure DevOps, the pipeline creates an image with the application and pushes the image into Azure Container Registry
+| Deployment pipeline | Built using GitOps[TODO: Add reference link here], triggers deployment using tags from Azure Container Registry into an Azure Kubernetes Cluster
+| Azure Kubernetes Cluster | Kubernetes cluster deployed through Helm Charts on Azure Kubernetes Service (AKS), with basic load balancer service, auto-scaling of pods 
+| Azure Keyvault Integration | The deployment pipeline uses the Azure Key Vault service to store & refer to secrets at Pod level. The code is a current implementation of a [work-around](https://github.com/Azure/kubernetes-keyvault-flexvol/issues/28) till native Key Vault service support is enabled.
+| Azure Traffic Manager | Traffic manager service in Azure to re-direct traffic across multiple geo-clusters. Currently this will be pointing to the single cluster deployed.
+
+## Planned
+
+| Component | Description
+|---|---
+| Integration with [Istio](https://istio.io/docs/concepts/what-is-istio/)  | Include the integration with Istio for ingress traffic management, inter-service communication , enabling canary deployments  
+| Monitoring & Logging | Integrate with [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/overview) to log critical services and application data, build dashboards.
+| Geo-replication | Deploying the application into three clusters in three different regions in active-active mode, with traffic manager routing traffic based on geo-affinity rules
+| Performance & Chaos Testing Pipelines | Creating a performance testing deployment pipeline, and a chaos testing pipeline that can each automate  testing
+| Blue/Green Canary Deployments | Enabling canary deployments for selected blue/green traffic on different versions of application, using Istio.
+
+
 
 ## Contribute
 
