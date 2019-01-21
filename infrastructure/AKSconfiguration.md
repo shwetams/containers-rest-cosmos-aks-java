@@ -10,7 +10,7 @@ This document will describe how to configure and leverage Azure key vault with A
 
 Setup k8s cluster on Azure using ARM template given in infrastructure folder.
 
-## Steps
+## Steps 
 
 1. Do basic setup for RBAC enabled cluster
    ``` Bash

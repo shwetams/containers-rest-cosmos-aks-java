@@ -17,7 +17,7 @@ declare servicePrincipalClientSecret=""
 declare objectId=""
 declare DBCONNSTR=""
 declare DBNAME=""
-declare KVNAME=""
+
 
 # Initialize parameters specified from command line
 while getopts ":i:g:n:l:" arg; do
@@ -171,7 +171,7 @@ fi
 echo "Starting deployment..."
 (
 	set -x
-	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" --template-file "$templateFilePath " --parameters servicePrincipalClientId="$servicePrincipalClientId" servicePrincipalClientSecret="$servicePrincipalClientSecret" DB-CONNSTR="$DBCONNSTR" DB-NAME="$DBNAME" objectId="$objectId" keyvault_name="$KVNAME" #--parameters "@${parametersFilePath}"
+	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" --template-file "$templateFilePath " --parameters servicePrincipalClientId="$servicePrincipalClientId" servicePrincipalClientSecret="$servicePrincipalClientSecret" DB-CONNSTR="$DBCONNSTR" DB-NAME="$DBNAME" objectId="$objectId"  #--parameters "@${parametersFilePath}"
 )
 
 if [ $?  == 0 ];
