@@ -1,7 +1,7 @@
 
-# Project Jackson Infrastructure
+# Deploying Infrastructure
 
-This repository includes the ARM templates for Project Jackson.
+This repository includes the ARM templates for deploying the Azure resources for the application at each rehion.
 
 ## Global ARM Template
 
@@ -11,14 +11,15 @@ To deploy all the global resources, see the [Global Readme](./global-resources/R
 
 ## Regional ARM Template
 
-To deploy all the resources, the script deploy.sh can be used.
-The below values are required as inputs to the script:
+To deploy all the resources, the script [deploy.sh](deploy.sh) can be used.
+
+The values below are required as inputs to the script, please keep them in handy:
 
 1. Azure Subscription ID
 2. Azure Resource Group (Add existing if one exists; else create a new one)
 3. Azure Deployment Location (i.e., EastUS, WestUS)
 4. App-name: Application Name
-5. ServicePrincipal ClientId  : see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+5. ServicePrincipal ClientId  : See details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
 6. ServicePrincipal ClientSecret (password):  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
 7. objectId : object ID of your live or microsoft account :  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
 8. DB-CONNSTR: get from  `vars.env` file
@@ -30,16 +31,19 @@ Another way to deploy is to run one-click deploy for all resources using Deploy 
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
 
-Once the ACR is deployed, follow steps given in [AKS configuration](./AKSconfiguration.md) to configure Key vault with AKS.
+Integrating Azure Key Vault with AKS
+Once all the resources are provisioned, it will also include Azure Key Vault Service. The Azure Key vault service enables storing secrets and allowing controlled access through service principal. Follow steps given in [AKS configuration](./AKSconfiguration.md) to configure Key vault with AKS.
 
 Once the AKS configuration with key vault  is done, follow these manual steps to set up CD pipeline:
 
 1. Create a new variable group in Azure Pipeline Library
-2. Create variable ACR_SERVER and set value to the server name, which will be the output of your deployment (<application name>container.azurecr.io)
-3. Get values of username and password from container using Azure Portal
-4. Create variables ACR_USERNAME and ACR_PASSWORD and set them to the values you got from the Azure Portal.
+1. Create variable ACR_SERVER and set value to the server name, which will be the output of your deployment (applicationname.container.azurecr.io)
+1. Get values of username and password from container using Azure Portal
+1. Create variables ACR_USERNAME and ACR_PASSWORD and set them to the values you got from the Azure Portal.
 
 Your deployment resources can now be used as part of your CD pipeline.
+
+Use the [azure-pipelines.yml](azure-pipelines.yml) file to deploy the build pipeline on Azure DevOps. You can refer to detailed step by step instruction in [Microsoft docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started-designer?view=vsts&tabs=new-nav).
 
 ## Environments
 

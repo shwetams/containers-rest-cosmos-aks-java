@@ -1,23 +1,21 @@
 # Azure kubernetes cluster integration with Azure key vault
+We have implemented integration with Azure Key Vault service using the [FlexVolume](https://github.com/kubernetes/community/blob/master/contributors/devel/flexvolume.md) approach. A flexvolume implementation is available at Azure github repo that provides custom implementation of flexvolume for calling the Azure Keyvault services. You can find the concept defined [here](https://github.com/Azure/kubernetes-keyvault-flexvol/blob/master/docs/concept.md) and a few more links that can be referred to.
+* https://github.com/Azure/aad-pod-identity
+* https://github.com/Azure/kubernetes-keyvault-flexvol 
 
-> Note: This document roughly follows [these tutorials](https://github.com/Azure/aad-pod-identity and https://github.com/Azure/kubernetes-keyvault-flexvol ).
-
-To enable Azure key vault integration, we have used Flex-volume[https://github.com/kubernetes/community/blob/master/contributors/devel/flexvolume.md].
-
-This document will describe how to configure and leverage Azure key vault with Azure kubernetes Services.
 
 ## Prerequisites
 
-Setup k8s cluster on Azure using ARM template given in infrastructure folder.
+Setup k8s cluster on Azure using ARM template given in infrastructure folder. 
 
 ## Steps 
 
-1. Do basic setup for RBAC enabled cluster
+1. Apply the following yaml to enable RBAC in the cluster cluster
    ``` Bash
    kubectl create -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
    ```
 
-2. Now create User Azure Identity in  MC_ resoource group
+2. Create a new User Azure Identity in  MC_resourcegroupname 
    ``` Bash
    az identity create -g <AKS resource group name starting with MC_ > -n <Identity name>
    ```
@@ -38,7 +36,7 @@ Setup k8s cluster on Azure using ARM template given in infrastructure folder.
    ``` Bash
    az identity show -n  <Identity name> -g <AKS resource group name starting with MC_ > | jq -r .principalId
    ```
-7. Now we will deploy Identity created in setp 2 to Kubernetes. first create a new yaml file and paste below content  and run with kubectl apply command
+7. Now we will deploy the Identity created in setp 2 to the Kubernest cluster. First create a new yaml file and paste below content, replacing the values in <> with your own values  and run with kubectl apply command
 ```
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
@@ -46,11 +44,11 @@ metadata:
   name: sample-aad #unique name
 spec:
   type: 0
-  ResourceID: /subscriptions/<Subscription ID got from step 5>/resourcegroups/<AKS resource group name starting with MC_ >/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<Identity name created in step 2>
-  ClientID: <Value of client ID got from step 3>
+  ResourceID: /subscriptions/<Subscription ID from step 5>/resourcegroups/<AKS resource group name starting with MC_ >/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<Identity name created in step 2>
+  ClientID: <Value of client ID from step 3>
 
 ```
-8. Create a AzureIdentityBinding. Create a new yaml file and paste below content  and run with kubectl apply command
+8. Create a AzureIdentityBinding. Create a new yaml file and paste below content and run with kubectl apply command
 ```
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
@@ -75,11 +73,11 @@ az keyvault set-policy -n <Key vault name> --secret-permissions get --spn  <Valu
 
 ## Validation
 
-1.  Check for Indentity. It should return azureidentity name created in step 7
+1.  Check for Identity. It should return azureidentity name that was created in step 7
    ``` 
    kubectl describe azureidentity
    ```
-2. Check for azureidentitybinding. It should return Azure Identity binding name created in step 8
+2. Check for azureidentitybinding. It should return Azure Identity binding name that was created in step 8
    ``` 
    kubectl describe azureidentitybinding
    ```
@@ -91,3 +89,5 @@ az keyvault set-policy -n <Key vault name> --secret-permissions get --spn  <Valu
    ``` Bash
    kubectl get pods -n default
    ```
+
+Once you have confirmed these validation steps, please continue with the BUild pipelines 

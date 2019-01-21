@@ -25,6 +25,10 @@ Before you get started please make sure you have the following pre-requisites se
 
 * **Azure CLI:** A lot of our steps to deploy is using the Azure CLI commands and tools. You can install the tool from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest), based on your development machine. 
 
+* **kubectl:** Install the kubectl utility to manage kubernetes clusters through command line. You can install kubectl using Azure CLI by following the instructions in this [link](https://docs.microsoft.com/en-us/cli/azure/acs/kubernetes?view=azure-cli-latest).
+
+* **jq utility:** This utility is used in several az commands for ease of querying information, you can skip this if you are comfortable with az commands and their JSON responses. You can install jq from [here](https://stedolan.github.io/jq/)
+
 * **Bash:** If you are on a Windows machine, make sure you have enabled the [Linux sub-system](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Or you could create a Linux Virtual Machine on Azure Subscription and execute the scripts. 
 
 * **Text Editor:** You might be reviewing, editing and modifying yaml, json and other configuration files. It's good to have a editor handy, we love [Visual Studio code](https://code.visualstudio.com/). 
@@ -50,6 +54,23 @@ The Azure Resource Manager (ARM) enables provisioning resources on Azure. The AR
 #### Following the setup instructions on [infrastructure readme.md](infrastructure/readme.md) for step by step creation of regional resources.
 
 
-* The largest component of this service is the Java Backend - see [the Backend Readme](./api/README.md)
-* To scale our service on Azure, we leverage ARM templates - see [the Infrastructure Readme](./infrastructure/README.md)
+## Step 4: Setup & run Build Pipeline
+Once the resources have been created, you will be setting up a build pipeline that automates compiling and building of the application, creation of an image and pushing the updated image in the Azure Container Registry Service.
+
+#### Follow the instructions on [the API Readme.md](./api/README.md)
+
+## Step 5: Setup & run Deployment Pipeline
+This application deploys GitOps for building the Release Pipeline. The release pipeline can also be built using Azure DevOps. We decided to adopt the GitOps framework as it provides additional benefits of tracking the changes in infrastructure through git.  The overview section has reference links as well as brief introduction to GitOps. 
+
+The current set of instructions is and we will be adding an automated shell script.
+
+#### Follow the instructions on [Gitops Readme.md](gitops/readme.md).
+
+
+## Step 6: Update Traffic Manager & Cosmos DB endpoints
+Once you have created and deployed the application across all regions you will need to update the traffic manager's endpoints to point to the application end-points in all three regions. You can do that by deploying the [endpoint_deploy.json](infrastructure/global-resources/readme.md#traffic-manager-endpoints) template.
+
+Also, additionally the CosmosDB can be integrated with the Virtual Network endpoints for all the Virtual networks in the three regions. This will limit access to the CosmosDB database only to the clusters deployed in the Virtual selected networks. You can do that by following simple steps on the [portal](https://docs.microsoft.com/en-us/azure/cosmos-db/how-to-configure-vnet-service-endpoint).
+
+**Note**: You can limit to one region as well, and skip the Azure Traffic manager all together.
 
