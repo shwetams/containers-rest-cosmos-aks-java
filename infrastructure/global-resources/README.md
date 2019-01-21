@@ -5,7 +5,7 @@
 Project Jackson uses Traffic Manager to route a specific URL to the correct region. In order to create these endpoints, the [`endpoint_deploy.json`](./endpoint_deploy.json) needs to be run. To do this, run:
 
 ```
-az group deployment create --template-file infrastructure/global-resoruces/endpoint_deploy.json --resource-group your-resource-group --parameters traffic_manager_endpoints=app1,app2 traffic_manager_endpoint_locations=eastus,westus
+az group deployment create --template-file infrastructure/global-resources/endpoint_deploy.json --resource-group your-resource-group --parameters traffic_manager_endpoints=app1,app2 traffic_manager_endpoint_locations=eastus,westus
 ```
 
 with `your-resource-group` as the name of the resource group you are creating the global resources in, app1 being the target for an endpoint that correlates to the azure region specified by the first parameter in the `traffic_manager_endpoint_locations` parameter. For example, `app1` is created in `eastus` and `app2` is created in `westus`.
@@ -86,3 +86,22 @@ show collections
 db.titles.count()
 db.titles.find ({primaryTitle: "Casablanca"})
 ```
+
+### create a new service principal and object id which will be used for AKS and key vault setup
+
+- Log into Azure: `az login`
+- If you have multiple subscriptions, confirm that the project subscription is active:
+
+``` Bash
+az account show
+az account set --subscription <subscription name/ID>
+
+az ad sp create-for-rbac --skip-assignment
+```
+- save values of appId and password. These will be used for AKS setup
+- Run below command to get object id of live id or microsoft id
+``` Bash
+az ad user show --upn-or-object-id <your Live ID> | jq -r .objectId
+
+```
+- save values of Object ID. These will be used for Key vault setup

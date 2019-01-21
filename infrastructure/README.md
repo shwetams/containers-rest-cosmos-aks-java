@@ -1,7 +1,7 @@
 
-# Project Jackson Infrastructure
+# Deploying Infrastructure
 
-This repository includes the ARM templates for Project Jackson.
+This repository includes the ARM templates for deploying the Azure resources for the application at each rehion.
 
 ## Global ARM Template
 
@@ -11,26 +11,39 @@ To deploy all the global resources, see the [Global Readme](./global-resources/R
 
 ## Regional ARM Template
 
-To deploy all the resources, the script deploy.sh can be used.
-The below values are required as inputs to the script:
+To deploy all the resources, the script [deploy.sh](deploy.sh) can be used.
+
+The values below are required as inputs to the script, please keep them in handy:
 
 1. Azure Subscription ID
 2. Azure Resource Group (Add existing if one exists; else create a new one)
 3. Azure Deployment Location (i.e., EastUS, WestUS)
 4. App-name: Application Name
+5. ServicePrincipal ClientId  : See details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+6. ServicePrincipal ClientSecret (password):  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+7. objectId : object ID of your live or microsoft account :  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
+8. DB-CONNSTR: get from  `vars.env` file
+9. DB-NAME: get from  `vars.env` file
+10. EXCLUDE-FILTER: default PersonRepository
+
 
 Another way to deploy is to run one-click deploy for all resources using Deploy to Azure:
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
 
-Once the ACR is deployed, follow these manual steps to set up CD pipeline:
+Integrating Azure Key Vault with AKS
+Once all the resources are provisioned, it will also include Azure Key Vault Service. The Azure Key vault service enables storing secrets and allowing controlled access through service principal. Follow steps given in [AKS configuration](./AKSconfiguration.md) to configure Key vault with AKS.
+
+Once the AKS configuration with key vault  is done, follow these manual steps to set up CD pipeline:
 
 1. Create a new variable group in Azure Pipeline Library
-2. Create variable ACR_SERVER and set value to the server name, which will be the output of your deployment (<application name>container.azurecr.io)
-3. Get values of username and password from container using Azure Portal
-4. Create variables ACR_USERNAME and ACR_PASSWORD and set them to the values you got from the Azure Portal.
+1. Create variable ACR_SERVER and set value to the server name, which will be the output of your deployment (applicationname.container.azurecr.io)
+1. Get values of username and password from container using Azure Portal
+1. Create variables ACR_USERNAME and ACR_PASSWORD and set them to the values you got from the Azure Portal.
 
 Your deployment resources can now be used as part of your CD pipeline.
+
+Use the [azure-pipelines.yml](azure-pipelines.yml) file to deploy the build pipeline on Azure DevOps. You can refer to detailed step by step instruction in [Microsoft docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started-designer?view=vsts&tabs=new-nav).
 
 ## Environments
 
@@ -41,28 +54,10 @@ Your deployment resources can now be used as part of your CD pipeline.
 
 ## Redis Cache
 
-- A Redis cache is used to enhance query performance.
-- The capacity of the Redis cache can be set to a value 1-6 in the ARM template.
-- You can enable or disable non-SSL port in the ARM template.
-- Azure allows 3 different values for the sku viz. Basic, Standard and Premium having different costs for each.
+- To be updated
 
 ## Auto Scaling
 
-- The app service uses auto scaling.  
-- When the CPU usage for an instance exceeds 70%, the app will automatically be scaled to add another compute instance, up to 5 instances.  This limit can be changed based on requirements.
-- When memory usage for an instance exceeds 70%, the app will automatically be scaled to add another compute instance, up to 5 instances. This limit can be changed based on requirements.
-- The minimum number of instances is set to 1.  This means that if the memory used on an instance is less, the instances will be scaled down automatically.
+- To be updated
 
-## Performance Testing
 
-To test the performance of an App Service:
-
-1. Navigate to the Azure Portal for your App Service
-2. Under `Developer Tools` select `Performance Testing`
-!['This image is of the performance testing menu item'](./images/perftest1.png)
-3. Select `New`
-!['This image is of new performance testing button'](./images/perftest2.png)
-4. Name the new performance test and configure the settings appropriately
-!['This image is of performance testing settings'](./images/perftest3.png)
-5. Submit the test.  After resources are automatically allocated, the test will run.
-6. After the test completes, Azure will automatically generate graphs and charts for analysis.

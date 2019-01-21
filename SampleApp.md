@@ -2,11 +2,11 @@
 
 This project includes a Java sample application, built on the Sprint Boot Data REST framework, that exposes multiple REST services to read and write data stored in Azure Cosmos DB.
 
-The REST services are hosted in containers running in Azure App Service for Containers.
+The REST services are hosted in containers running in Azure Kubernetes Service (AKS).
 
-HA/DR is provided by hosting the services in multiple regions, as well as Cosmos DB's native geo-redundancy.
+HA/DR is provided by hosting the services in multiple regions, using AKS, as well as Cosmos DB's native geo-redundancy.
 
-Traffic Manager is used to route traffic based on geo-proximity, and Application Gateway provides path-based routing, service authentication and DDoS protection.
+Traffic Manager is used to route traffic based on geo-proximity.
 
 Cosmos DB is configured to use the NoSQL MongoDB API. *(Note: We are currently working to add a sample that uses the Cosmos SQL API.)*
 
