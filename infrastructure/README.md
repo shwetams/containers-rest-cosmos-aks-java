@@ -23,14 +23,16 @@ The below values are required as inputs to the script:
 7. objectId : object ID of your live or microsoft account :  see details in [Global Readme](./global-resources/README.md). section named as "create a new service principal and object id which will be used for AKS and key vault setup"
 8. DB-CONNSTR: get from  `vars.env` file
 9. DB-NAME: get from  `vars.env` file
-10. EXCLUDE-FILTER: default null
+10. EXCLUDE-FILTER: default PersonRepository
 
 
 Another way to deploy is to run one-click deploy for all resources using Deploy to Azure:
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
 
-Once the ACR is deployed, follow these manual steps to set up CD pipeline:
+Once the ACR is deployed, follow steps given in [AKS configuration](./AKSconfiguration.md) to configure Key vault with AKS.
+
+Once the AKS configuration with key vault  is done, follow these manual steps to set up CD pipeline:
 
 1. Create a new variable group in Azure Pipeline Library
 2. Create variable ACR_SERVER and set value to the server name, which will be the output of your deployment (<application name>container.azurecr.io)

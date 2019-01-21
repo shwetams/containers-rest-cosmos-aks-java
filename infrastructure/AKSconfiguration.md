@@ -52,12 +52,12 @@ spec:
 ```
 8. Create a AzureIdentityBinding. Create a new yaml file and paste below content  and run with kubectl apply command
 ```
-   apiVersion: "aadpodidentity.k8s.io/v1"
+apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
 metadata:
  name: sample-aad-azure-identity-binding
 spec:
- AzureIdentity: sample-aad #unique name created in setp 6
+ AzureIdentity: sample-aad #unique name created in step 7
  Selector: sampleselectername # unique selector name, will be used for pod deployment
 ```
 9. Now install the KeyVault Flexvolume in your cluster
