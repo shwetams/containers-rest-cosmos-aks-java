@@ -1,4 +1,4 @@
-# Containerized Java REST Services on Azure App Service with a CosmosDB backend
+# Containerized Java REST Services on Azure Kubernetes Service with a CosmosDB backend
 
 <!-- ## Project Health
 
