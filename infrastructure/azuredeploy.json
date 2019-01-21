@@ -19,15 +19,15 @@
     },
     "enableHttpApplicationRouting": {
       "type": "bool",
-      "defaultValue": "false"
+      "defaultValue": false
     },
     "enableRBAC": {
       "type": "bool",
-      "defaultValue": "true"
+      "defaultValue": true
     },
     "kubernetesVersion": {
       "type": "string",
-      "defaultValue": "1.7.7"
+      "defaultValue": "1.11.5"
     },
     "servicePrincipalClientId": {
       "type": "securestring"
