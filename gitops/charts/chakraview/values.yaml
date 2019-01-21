@@ -10,7 +10,7 @@ imagePullPolicy: IfNotPresent
 imagePullSecret: 
 
 aad:
-  aadpodidbinding: walmartcxotitlec
+  aadpodidbinding: 
 
 nameOverride: ""
 fullnameOverride: ""
@@ -34,6 +34,12 @@ hpa:
   memory:
   # average http requests per second per pod (k8s-prometheus-adapter)
   requests:
+
+secrets:
+  registry: acrsecret
+  server: 
+  username:
+  password:
 
 ingress:
   enabled: false

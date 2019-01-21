@@ -1,0 +1,59 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-admin
+rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - '*'
+  - nonResourceURLs:
+    - '*'
+    verbs:
+    - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:discovery
+rules:
+  - nonResourceURLs:
+    - /api
+    - /api/*
+    - /apis
+    - /apis/*
+    - /healthz
+    - /openapi
+    - /openapi/*
+    - /swagger-2.0.0.pb-v1
+    - /swagger.json
+    - /swaggerapi
+    - /swaggerapi/*
+    - /version
+    - /version/
+    verbs:
+      - get
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+  - kind: ServiceAccount
+    name: tiller
+    namespace: flux

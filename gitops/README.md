@@ -27,6 +27,8 @@ helm init --skip-refresh --upgrade --service-account tiller
 ```
 Apply this following script, create a new YAML file and apply it using the Kubectl. 
 
+kubectl apply -f 
+
 ```bash
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -156,7 +158,7 @@ The config repo has the following structure:
 Once the namespaces are up, you need to add the secrets to the namespace manually as of now, before you see the containers running inside your cluster.
 
 ```bash
-kubectl create secret docker-registry walmartacrsecret --docker-server=<ACR Name> --docker-username=<Registry name> --docker-password=<Registry password> --docker-email=<email Id>
+kubectl create secret docker-registry <name> --docker-server=<ACR Name> --docker-username=<Registry name> --docker-password=<Registry password> --docker-email=<email Id>
 ```
 
 You can setup or use [this](/api/azure-pipelines.yml) Azure DevOps build pipeline to generate a new container. 
