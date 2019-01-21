@@ -25,9 +25,14 @@ Deploy Tiller in kube-system namespace:
 ```bash
 helm init --skip-refresh --upgrade --service-account tiller
 ```
-Apply this following script, create a new YAML file and apply it using the Kubectl. 
+RBAC permissions need to be applied and this can be done by applying this yaml file- 
 
-kubectl apply -f 
+```
+kubectl apply -f https://raw.githubusercontent.com/shwetams/containers-rest-cosmos-appservice-java/master/gitops/permissions.yaml
+
+```
+
+Here are the permissions you applied above: 
 
 ```bash
 apiVersion: rbac.authorization.k8s.io/v1
