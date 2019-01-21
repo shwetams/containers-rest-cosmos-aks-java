@@ -56,7 +56,8 @@
       "type": "string"
     },
     "EXCLUDE-FILTER": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "PersonRepository"
     },
     "OAUTH-KEYSET-URI": {
       "type": "string",
