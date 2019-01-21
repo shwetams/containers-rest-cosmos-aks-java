@@ -6,12 +6,17 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation> -c <servicePrincipalClientId> -s <servicePrincipalClientSecret> -o <objectId> -d <DBCONNSTR> -m <DBNAME>" 1>&2; exit 1; }
 
 declare subscriptionId=""
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
+declare servicePrincipalClientId=""
+declare servicePrincipalClientSecret=""
+declare objectId=""
+declare DBCONNSTR=""
+declare DBNAME=""
 
 # Initialize parameters specified from command line
 while getopts ":i:g:n:l:" arg; do
@@ -27,6 +32,22 @@ while getopts ":i:g:n:l:" arg; do
 			;;
 		l)
 			resourceGroupLocation=${OPTARG}
+			;;
+
+		c)
+			servicePrincipalClientId=${OPTARG}
+			;;
+		s)
+			servicePrincipalClientSecret=${OPTARG}
+			;;
+		o)
+			objectId=${OPTARG}
+			;;
+		d)
+			DBCONNSTR=${OPTARG}
+			;;
+		m)
+			DBNAME=${OPTARG}
 			;;
 		esac
 done
@@ -54,6 +75,41 @@ if [[ -z "$resourceGroupLocation" ]]; then
 
 	echo "Enter resource group location:"
 	read resourceGroupLocation
+fi
+
+if [[ -z "$servicePrincipalClientId" ]]; then
+	echo "Please enter service principal client ID creates using Global readme "
+	echo "Enter your service principal client ID:"
+	read servicePrincipalClientId
+	[[ "${servicePrincipalClientId:?}" ]]
+fi
+
+if [[ -z "$servicePrincipalClientSecret" ]]; then
+	echo "Please enter service principal client secret creates using Global readme "
+	echo "Enter your service principal client secret:"
+	read servicePrincipalClientSecret
+	[[ "${servicePrincipalClientSecret:?}" ]]
+fi
+
+if [[ -z "$objectId" ]]; then
+	echo "Please enter object ID of you azure login. This can be looked up with the CLI using: az ad user show --upn-or-object-id <your Live ID> | jq -r .objectId "
+	echo "Enter your object ID:"
+	read objectId
+	[[ "${objectId:?}" ]]
+fi
+
+if [[ -z "$DBCONNSTR" ]]; then
+	echo "Please enter DB-CONNSTR  from vars.env file "
+	echo "Enter your DB CONNSTR:"
+	read DBCONNSTR
+	[[ "${DBCONNSTR:?}" ]]
+fi
+
+if [[ -z "$DBNAME" ]]; then
+	echo "Please enter DB-Name  from vars.env file "
+	echo "Enter your DB Name:"
+	read DBNAME
+	[[ "${DBNAME:?}" ]]
 fi
 
 if [[ -z "$deploymentName" ]]; then
@@ -114,7 +170,7 @@ fi
 echo "Starting deployment..."
 (
 	set -x
-	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" --template-file "$templateFilePath" #--parameters "@${parametersFilePath}"
+	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" --template-file "$templateFilePath " --parameters servicePrincipalClientId="$servicePrincipalClientId" servicePrincipalClientSecret="$servicePrincipalClientSecret" DB-CONNSTR="$DBCONNSTR" DB-NAME="$DBNAME" objectId="$objectId" #--parameters "@${parametersFilePath}"
 )
 
 if [ $?  == 0 ];

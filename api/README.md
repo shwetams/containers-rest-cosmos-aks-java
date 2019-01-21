@@ -8,7 +8,7 @@ This readme contains the Backend API, written in [Java](https://www.java.com) us
 
 * 🔄 [Clone](https://www.git-scm.com/docs/git-clone) the repository using [Git](https://git-scm.com/downloads)
 ```
-git clone https://github.com/Microsoft/containers-rest-cosmos-appservice-java.git
+git clone https://github.com/shwetams/containers-rest-cosmos-appservice-java.git
 ```
 * 🏗 Install [Oracle JDK8u191](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) to help us build Java code
 * 📦 Install [Maven 3.6.0](https://maven.apache.org/install.html) to help manage our dependencies
