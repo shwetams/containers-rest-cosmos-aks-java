@@ -20,6 +20,8 @@ Infrastructure Build Status: [![Build Status](https://dev.azure.com/csebostoncre
 This project has been created to emulate several best practices that can be adopted while building and deploying applications on Azure.
 This document explains what the project provides and why, and it provides instructions for getting started. This project is work in progress as we continually evolve the deployment code. 
 
+The project has been initially forked from a [repo](https://github.com/Microsoft/containers-rest-cosmos-appservice-java) that deploys the same application on Azure App Services. 
+
 ## Enterprise-Class Applications Defined
 
 We are using the term "enterprise-class app" to refer to an end-to-end solution that delivers the following 
