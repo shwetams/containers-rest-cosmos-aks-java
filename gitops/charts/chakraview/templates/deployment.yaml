@@ -1,0 +1,65 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ template "podinfo.name" . }}
+    chart: {{ template "podinfo.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "podinfo.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "podinfo.name" . }}
+        release: {{ .Release.Name }}
+        aadpodidbinding: {{ .Values.aad.aadpodidbinding }}
+      annotations:
+        prometheus.io/scrape: 'true'
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: ["/bin/sh", "-ce", "export DB_CONNSTR=$(cat /kvmnt/db-connstr); export DB_NAME=$(cat /kvmnt/db-name); export  OAUTH_KEYSET_URI=$(cat /kvmnt/oauth-keyset-uri); export  EXCLUDE_FILTER=$(cat /kvmnt/exclude-filter); export  APPLICATION_INSIGHTS_IKEY=$(cat /kvmnt/application-insights-ikey); echo $DB_CONNSTR; echo $DB_NAME; echo $OAUTH_KEYSET_URI; echo $EXCLUDE_FILTER; echo $APPLICATION_INSIGHTS_IKEY; java  -Djava.security.egd=file:/dev/./urandom -jar /spring-dal.jar"]
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: test
+              mountPath: /kvmnt
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: test
+          flexVolume:
+            driver: "azure/kv"
+            options:
+              usepodidentity: "true"       # [OPTIONAL] if not provided, will default to "false"
+              keyvaultname: {{ .Values.volumes.keyvaultname }}              # the name of the KeyVault
+              keyvaultobjectnames: "oauth-keyset-uri;db-connstr;db-name;application-insights-ikey;exclude-filter"
+              keyvaultobjecttypes: "secret;secret;secret;secret;secret"
+              resourcegroup: {{ .Values.volumes.resourcegroup }}              # the resource group of the KeyVault
+              subscriptionid: {{ .Values.volumes.subscriptionid }}            # the subscription ID of the KeyVault
+              tenantid: {{ .Values.volumes.tenantid }}                   # the tenant ID of the KeyVault
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

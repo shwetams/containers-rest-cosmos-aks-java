@@ -1,0 +1,23 @@
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: chakraview-prod
+  namespace: prod
+  annotations:
+    flux.weave.works/automated: "true"
+    flux.weave.works/tag.chart-image: glob:prod-*
+spec:
+  releaseName: chakraview-prod
+  chart:
+    git: git@github.com:munishmalhotra/gitops-chakraview.git
+    path: charts/chakraview
+    ref: master
+  values:
+    image: walmartcontainerregistry.azurecr.io/chakraview:prod-20190118.1
+    replicaCount: 3
+    hpa:
+      enabled: true
+      maxReplicas: 10
+      cpu: 50
+      memory: 256Mi
