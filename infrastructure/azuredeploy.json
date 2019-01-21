@@ -6,6 +6,7 @@
       "type": "string",
       "defaultValue": "[uniqueString(resourceGroup().id)]"
     },
+   
    "database_connection_string": {
       "type": "securestring",
       "defaultValue": "mongodb://localhost"
@@ -88,7 +89,7 @@
     "application_gateway_ref": "[resourceId('Microsoft.Network/applicationGateways', variables('application_gateway_name'))]",
     "aks_dnsprefix_name": "[concat(parameters('application_name'), 'dns')]",
     "aks_name": "[concat(parameters('application_name'), 'aks')]",
-    "kv_name": "[concat(parameters('application_name'), '-kv')]"
+    "kv_name": "[concat(parameters('application_name'), 'kv')]"
     
 
   },

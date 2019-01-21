@@ -38,7 +38,7 @@ Setup k8s cluster on Azure using ARM template given in infrastructure folder.
    ``` Bash
    az identity show -n  <Identity name> -g <AKS resource group name starting with MC_ > | jq -r .principalId
    ```
-7. Now we will deploy Identity created in setp 2 to Kubernetes. first create a new yaml file and paste below content 
+7. Now we will deploy Identity created in setp 2 to Kubernetes. first create a new yaml file and paste below content  and run with kubectl apply command
 ```
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
@@ -50,7 +50,7 @@ spec:
   ClientID: <Value of client ID got from step 3>
 
 ```
-8. Create a AzureIdentityBinding 
+8. Create a AzureIdentityBinding. Create a new yaml file and paste below content  and run with kubectl apply command
 ```
    apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
@@ -66,7 +66,7 @@ kubectl create -f https://raw.githubusercontent.com/Azure/kubernetes-keyvault-fl
    ```
 10.  Assign permissions to new identity to key vault
     
-    az role assignment create --role Reader --assignee <Value of Prinicpal ID got from step 6> --scope /subscriptions/<Subscription ID got from step 5>/resourcegroups/walmart/providers/Microsoft.KeyVault/vaults/<Key vault name>
+    az role assignment create --role Reader --assignee <Value of Prinicpal ID got from step 6> --scope /subscriptions/<Subscription ID got from step 5>/resourcegroups/<resource group of keyvault>/providers/Microsoft.KeyVault/vaults/<Key vault name>
     
 11. Set key vault policy 
 ```   
